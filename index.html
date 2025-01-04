@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Enhanced Photo Editor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>AI-Enhanced Photo Editor</h1>
+  <div id="main">
+    <div id="image">
+        <input type="file" id="imageUpload" accept="image/*">
+        <canvas id="photoCanvas"></canvas>
+    </div>
+    <div class="controls">
+        <!-- <button id="enhanceImage">Enhance Image</button> -->
+        <button id="removeBg">Remove Background</button>
+        <button id="downloadImage">Download</button>
+        <div id="rotate">
+            <button id="rotateLeft">Rotate Left</button>
+            <button id="rotateRight">Rotate Right</button>
+        </div>
+        <div id="crop">
+            <button id="cropMode">Crop Mode</button>
+            <button id="cancelCrop">Cancel Crop</button>
+            <button id="applyCrop">Apply Crop</button>
+        </div>
+    </div>
+  </div>
+</body>
+<script src="./script.js"></script>
+</html>
