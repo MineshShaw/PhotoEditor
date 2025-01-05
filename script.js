@@ -139,6 +139,8 @@ removeBgBtn.addEventListener('click', async () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(processedImage, 0, 0);
       };
+
+      img = processedImage;
     } catch (error) {
       alert('Error removing background: ' + error.message);
     }
