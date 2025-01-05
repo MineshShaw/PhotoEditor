@@ -10,7 +10,7 @@ This is a simple photo editor web application built using HTML, CSS, and JavaScr
 - Remove Background using AI
 - Save dited image locally
 
-- ```bash
+```bash
 git clone https://github.com/MineshShaw/PhotoEditor
 cd PhotoEditor
 open index.html
