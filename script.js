@@ -43,6 +43,9 @@ function cropImage() {
   canvas.width = width;
   canvas.height = height;
   ctx.putImageData(croppedImageData, 0, 0);
+
+  img = new Image();
+  img.src = canvas.toDataURL();
 }
 
 function drawImage() {
