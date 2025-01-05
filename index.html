@@ -21,11 +21,31 @@
             <button id="rotateLeft">Rotate Left</button>
             <button id="rotateRight">Rotate Right</button>
         </div>
-        <div id="crop">
-            <button id="cropMode">Crop Mode</button>
-            <button id="cancelCrop">Cancel Crop</button>
-            <button id="applyCrop">Apply Crop</button>
-        </div>
+        <button id="cropMode">Crop Mode</button>
+        <button id="cancelCrop">Close Crop</button>
+        <button id="applyCrop">Apply Crop</button>
+    </div>
+  </div>
+  <div id="cropModal">
+    <div id="cropContainer">
+      <div id="cropControls">
+        <label>
+          X:
+          <input id="cropX" type="range" min="0" max="500" value="100">
+        </label>
+        <label>
+          Y:
+          <input id="cropY" type="range" min="0" max="500" value="100">
+        </label>
+        <label>
+          Width:
+          <input id="cropWidth" type="range" min="50" max="500" value="300">
+        </label>
+        <label>
+          Height:
+          <input id="cropHeight" type="range" min="50" max="500" value="300">
+        </label>
+      </div>
     </div>
   </div>
 </body>

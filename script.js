@@ -3,6 +3,7 @@ const imageUpload = document.getElementById('imageUpload');
 const canvas = document.getElementById('photoCanvas');
 const ctx = canvas.getContext('2d');
 const canvasBounds = canvas.getBoundingClientRect();
+const cropModal = document.getElementById('cropModal');
 ctx.font = '20px Arial';
 ctx.fillText('Upload an image to start editing!', 10, canvas.height / 2);
 
@@ -14,11 +15,63 @@ const cancelCropBtn = document.getElementById('cancelCrop');
 
 let isCropMode = false;
 let rotationAngle = 0;
-let isMouseDown = false;
-let cropStart = { x: 0, y: 0 };
-let cropEnd = { x: 0, y: 0 };
 let img = new Image();
-let cropRect = null;
+const cropX = document.getElementById('cropX');
+const cropY = document.getElementById('cropY');
+const cropWidth = document.getElementById('cropWidth');
+const cropHeight = document.getElementById('cropHeight');
+
+[cropX, cropY, cropWidth, cropHeight].forEach(slider => {
+  slider.addEventListener('input', drawCropArea);
+});
+
+applyCropBtn.addEventListener('click', cropImage);
+cancelCropBtn.addEventListener('click', () => {
+  cropModal.style.display = 'none';
+});
+
+function cropImage() {
+  const x = parseInt(cropX.value, 10);
+  const y = parseInt(cropY.value, 10);
+  const width = parseInt(cropWidth.value, 10);
+  const height = parseInt(cropHeight.value, 10);
+
+  // Get the cropped image data
+  const croppedImageData = ctx.getImageData(x, y, width, height);
+
+  // Clear the canvas and draw the cropped image
+  canvas.width = width;
+  canvas.height = height;
+  ctx.putImageData(croppedImageData, 0, 0);
+}
+
+function drawImage() {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.rotate((rotationAngle * Math.PI) / 180);
+  ctx.drawImage(img, -img.width / 2, -img.height / 2);
+  ctx.restore();
+}
+
+function drawCropArea() {
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Redraw the image
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  // Draw the cropping rectangle
+  const x = parseInt(cropX.value, 10);
+  const y = parseInt(cropY.value, 10);
+  const width = parseInt(cropWidth.value, 10);
+  const height = parseInt(cropHeight.value, 10);
+
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x, y, width, height);
+}
 
 // Download Image
 document.getElementById('downloadImage').addEventListener('click', () => {
@@ -27,90 +80,6 @@ document.getElementById('downloadImage').addEventListener('click', () => {
     link.href = canvas.toDataURL('image/png');
     link.click();
 });
-
-// Crop Image
-function getMousePos(event) {
-  const x = event.clientX - canvasBounds.left;
-  const y = event.clientY - canvasBounds.top;
-  return { x, y };
-}
-
-cropModeBtn.addEventListener('click', () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  ctx.beginPath();
-  ctx.rect(cropStart.x, cropStart.y, cropEnd.x - cropStart.x, cropEnd.y - cropStart.y);
-  ctx.strokeStyle = 'red';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([6, 3]);
-  ctx.stroke();
-  isCropMode = true;
-});
-
-// Handle mouse down event for cropping
-canvas.addEventListener('mousedown', (e) => {
-  if (isCropMode) {
-      isMouseDown = true;
-      const mousePos = getMousePos(e);
-      cropStart = { x: mousePos.x, y: mousePos.y };
-      cropEnd = { x: mousePos.x, y: mousePos.y };
-  }
-});
-
-// Handle mouse move event for cropping
-canvas.addEventListener('mousemove', (e) => {
-  if (isCropMode && isMouseDown) {
-      const mousePos = getMousePos(e);
-      cropEnd = { x: mousePos.x, y: mousePos.y };
-      drawCropPreview();
-  }
-});
-
-// Handle mouse up event to finalize crop area
-canvas.addEventListener('mouseup', () => {
-  if (isCropMode) {
-      isMouseDown = false;
-      cropRect = {
-          x: Math.min(cropStart.x, cropEnd.x),
-          y: Math.min(cropStart.y, cropEnd.y),
-          width: Math.abs(cropEnd.x - cropStart.x),
-          height: Math.abs(cropEnd.y - cropStart.y),
-      };
-  }
-});
-
-// Function to draw crop preview
-function drawCropPreview() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Redraw image
-
-  // Draw the crop area preview
-  ctx.beginPath();
-  ctx.rect(cropStart.x, cropStart.y, cropEnd.x - cropStart.x, cropEnd.y - cropStart.y);
-  ctx.strokeStyle = 'red';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([6, 3]);
-  ctx.stroke();
-}
-
-// Apply crop functionality
-applyCropBtn.addEventListener('click', () => {
-  if (cropRect) {
-      const imageData = ctx.getImageData(cropRect.x, cropRect.y, cropRect.width, cropRect.height);
-      canvas.width = cropRect.width;
-      canvas.height = cropRect.height;
-      ctx.putImageData(imageData, 0, 0);
-  }
-});
-
-// Cancel crop functionality
-cancelCropBtn.addEventListener('click', () => {
-  isCropMode = false;
-  cropRect = null;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Redraw the image
-});
-
 
 // Image Upload
 imageUpload.addEventListener('input', (e) => {
@@ -133,19 +102,7 @@ imageUpload.addEventListener('input', (e) => {
   };
 });
 
-function drawImage() {
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.save();
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.rotate((rotationAngle * Math.PI) / 180);
-  ctx.drawImage(img, -img.width / 2, -img.height / 2);
-  ctx.restore();
-}
-
 // Remove Background
-
-
 removeBgBtn.addEventListener('click', async () => {
     if (!img.src) {
       alert('Please upload an image first!');
@@ -196,4 +153,9 @@ document.getElementById('rotateLeft').addEventListener('click', () => {
 document.getElementById('rotateRight').addEventListener('click', () => {
   rotationAngle = (rotationAngle + 90) % 360; 
   drawImage();
+});
+
+// Crop Mode
+cropModeBtn.addEventListener('click', () => {
+  cropModal.style.display = 'flex';
 });
