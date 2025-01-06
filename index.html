@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI-Enhanced Photo Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>AI-Enhanced Photo Editor</h1>
+    <h1>Photo Editor</h1>
+
   <div id="main">
     <div id="image">
+        <label for="imageUpload">Upload Image:</label>
         <input type="file" id="imageUpload" accept="image/*">
         <canvas id="photoCanvas"></canvas>
     </div>
@@ -17,13 +20,16 @@
         <!-- <button id="enhanceImage">Enhance Image</button> -->
         <button id="removeBg">Remove Background</button>
         <button id="downloadImage">Download</button>
+        <h2>Rotate</h2>
         <div id="rotate">
-            <button id="rotateLeft">Rotate Left</button>
-            <button id="rotateRight">Rotate Right</button>
+            <button id="rotateLeft"><i class="fa-solid fa-rotate-left"></i></button>
+            <button id="rotateRight"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
         <button id="cropMode">Crop Mode</button>
-        <button id="cancelCrop">Close Crop</button>
-        <button id="applyCrop">Apply Crop</button>
+        <div id="cropFunctions">
+          <button id="cancelCrop">Close Crop</button>
+          <button id="applyCrop">Apply Crop</button>
+        </div>
     </div>
   </div>
   <div id="cropModal">

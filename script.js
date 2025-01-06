@@ -4,6 +4,7 @@ const canvas = document.getElementById('photoCanvas');
 const ctx = canvas.getContext('2d');
 const canvasBounds = canvas.getBoundingClientRect();
 const cropModal = document.getElementById('cropModal');
+const cropFunctions = document.getElementById('cropFunctions');
 ctx.font = '20px Arial';
 ctx.fillText('Upload an image to start editing!', 10, canvas.height / 2);
 
@@ -13,7 +14,6 @@ const cropModeBtn = document.getElementById('cropMode');
 const applyCropBtn = document.getElementById('applyCrop');
 const cancelCropBtn = document.getElementById('cancelCrop');
 
-let isCropMode = false;
 let rotationAngle = 0;
 let img = new Image();
 const cropX = document.getElementById('cropX');
@@ -28,6 +28,7 @@ const cropHeight = document.getElementById('cropHeight');
 applyCropBtn.addEventListener('click', cropImage);
 cancelCropBtn.addEventListener('click', () => {
   cropModal.style.display = 'none';
+  cropFunctions.style.display = 'none';
 });
 
 function cropImage() {
@@ -46,6 +47,9 @@ function cropImage() {
 
   img = new Image();
   img.src = canvas.toDataURL();
+
+  cropModal.style.display = 'none';
+  cropFunctions.style.display = 'none';
 }
 
 function drawImage() {
@@ -78,6 +82,10 @@ function drawCropArea() {
 
 // Download Image
 document.getElementById('downloadImage').addEventListener('click', () => {
+  if (!img.src) {
+    alert('Please upload an image first!');
+    return;
+  }
     const link = document.createElement('a');
     link.download = 'edited-image.png';
     link.href = canvas.toDataURL('image/png');
@@ -151,16 +159,29 @@ removeBgBtn.addEventListener('click', async () => {
 
 // Rotate Image
 document.getElementById('rotateLeft').addEventListener('click', () => {
+  if (!img.src) {
+    alert('Please upload an image first!');
+    return;
+  }
   rotationAngle = (rotationAngle - 90 + 360) % 360;
   drawImage();
 });
 
 document.getElementById('rotateRight').addEventListener('click', () => {
+  if (!img.src) {
+    alert('Please upload an image first!');
+    return;
+  }
   rotationAngle = (rotationAngle + 90) % 360; 
   drawImage();
 });
 
 // Crop Mode
 cropModeBtn.addEventListener('click', () => {
+  if (!img.src) {
+    alert('Please upload an image first!');
+    return;
+  }
   cropModal.style.display = 'flex';
+  cropFunctions.style.display = 'flex';
 });
