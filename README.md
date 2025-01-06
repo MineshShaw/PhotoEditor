@@ -2,6 +2,8 @@
 
 This is a simple photo editor web application built using HTML, CSS, and JavaScript. The app allows users to apply basic enhancements and manipulations to their images in a user-friendly interface.
 
+ https://mineshshaw.github.io/PhotoEditor/
+
 ## Features
 - Basic image editing tools:
   - Rotating
